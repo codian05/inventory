@@ -1,0 +1,95 @@
+/* =============================================================================
+   Phase 7 — Reports module
+   Additive only: every class here is new (report-*, print-*). Nothing in
+   this file redefines or overrides an existing dashboard.css rule — it
+   reuses existing tokens/classes (glass-card, icon-badge, chart-card,
+   stat-tile, chart-canvas-wrap, bg-grad-*) exactly as they already work
+   elsewhere in the app.
+   ============================================================================= */
+
+.report-tile {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.report-tile:hover {
+    transform: translateY(-2px);
+}
+
+.report-tile-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.report-tile-desc {
+    font-size: .8125rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.report-filter-form .form-label {
+    margin-bottom: .2rem;
+}
+
+.report-table td,
+.report-table th {
+    white-space: nowrap;
+}
+
+.report-table td:nth-child(1),
+.report-table th:nth-child(1) {
+    white-space: normal;
+}
+
+.print-header {
+    margin-bottom: var(--space-4);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Print                                                                      */
+/* -------------------------------------------------------------------------- */
+@media print {
+    .sidebar,
+    .sidebar-overlay,
+    .topbar,
+    .app-footer,
+    .fab-wrap,
+    .fab-backdrop,
+    .toast-container,
+    .spinner-overlay,
+    .no-print {
+        display: none !important;
+    }
+
+    .main-content {
+        margin: 0 !important;
+        width: 100% !important;
+    }
+
+    .wrapper {
+        display: block !important;
+    }
+
+    .print-header {
+        display: block !important;
+    }
+
+    .card,
+    .chart-card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+
+    .report-table th,
+    .report-table td {
+        color: #000 !important;
+    }
+
+    body {
+        background: #fff !important;
+    }
+}

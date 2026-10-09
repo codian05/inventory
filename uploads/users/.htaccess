@@ -1,0 +1,34 @@
+# Defense-in-depth only. This directory should only ever contain
+# images — handle_profile_upload() in includes/functions.php already
+# validates real (content-sniffed) MIME type against a fixed
+# whitelist and generates filenames server-side, never from user
+# input, so this file changes nothing about what gets uploaded. It
+# exists purely so that, even in a hypothetical future where that
+# validation is loosened or bypassed, nothing placed in this directory
+# can ever be executed as a script by the web server.
+
+# Apache 2.4+
+<IfModule mod_authz_core.c>
+    <FilesMatch "\.(php|phtml|php3|php4|php5|php7|pl|py|cgi|asp|aspx|sh|exe)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+# Apache 2.2 fallback
+<IfModule !mod_authz_core.c>
+    <FilesMatch "\.(php|phtml|php3|php4|php5|php7|pl|py|cgi|asp|aspx|sh|exe)$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</IfModule>
+
+# Belt-and-suspenders for mod_php-based setups.
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>

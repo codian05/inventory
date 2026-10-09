@@ -1,0 +1,2143 @@
+/* =============================================================================
+   Automated Inventory Management System
+   Soft Enterprise Neumorphism — Phases 1–4 (Foundation, Shell, Components, Polish)
+   Bootstrap 5.3.3 compatible. All legacy class names preserved.
+   ============================================================================= */
+
+/* -------------------------------------------------------------------------- */
+/* 1. DESIGN TOKENS — Light mode                                              */
+/* -------------------------------------------------------------------------- */
+
+:root {
+    /* Layout */
+    --sidebar-width: 260px;
+    --topbar-height: 64px;
+
+    /* Spacing (4px base) */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+
+    /* Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-full: 999px;
+    --card-radius: var(--radius-lg);
+
+    /* Surfaces & canvas */
+    --bg-base: #e8ecf1;
+    --bg-soft: var(--bg-base);
+    --surface-1: #f4f6f9;
+    --surface-2: #ffffff;
+    --surface-muted: #eef1f6;
+    --surface: var(--surface-2);
+    --surface-elevated: var(--surface-2);
+
+    /* Ink */
+    --ink-primary: #1a2332;
+    --ink-secondary: #4a5568;
+    --ink-muted: #7b8798;
+    --text-primary: var(--ink-primary);
+    --text-secondary: var(--ink-secondary);
+    --text-muted: var(--ink-muted);
+
+    /* Brand & status */
+    --brand-primary: #2f5bea;
+    --brand-primary-hover: #2548c7;
+    --brand-primary-soft: #e8eefc;
+    --brand-accent: #0ea5a0;
+    --status-success: #16a34a;
+    --status-success-soft: #dcfce7;
+    --status-warning: #d97706;
+    --status-warning-soft: #fef3c7;
+    --status-danger: #dc2626;
+    --status-danger-soft: #fee2e2;
+    --status-info: #2563eb;
+    --status-info-soft: #dbeafe;
+
+    /* Legacy accent aliases (charts, icons) */
+    --accent-1: var(--brand-primary);
+    --accent-2: var(--status-info);
+    --accent-3: var(--brand-accent);
+    --accent-warn: var(--status-warning);
+    --accent-danger: var(--status-danger);
+    --accent-success: var(--status-success);
+
+    /* Chart palette — single source of truth for every Chart.js graph on
+       the dashboards. Read at runtime by assets/js/chart-theme.js so the
+       charts always match the active light/dark theme automatically. */
+    --chart-primary: var(--brand-primary);
+    --chart-primary-soft: #7b93e0;
+    --chart-secondary: #8a7cd6;
+    --chart-secondary-soft: #6c5fc4;
+    --chart-success: #2f9e73;
+    --chart-warning: #c99a3d;
+    --chart-danger: #cf6b66;
+    --chart-info: #4f7fc9;
+    --chart-critical: #b97a3a;
+    --chart-grid: rgba(26, 35, 50, 0.07);
+    --chart-label: var(--ink-muted);
+    --chart-tooltip-bg: var(--surface-elevated, var(--surface-2));
+    --chart-tooltip-border: var(--border-strong);
+
+    /* Borders */
+    --border-subtle: rgba(26, 35, 50, 0.08);
+    --border-strong: rgba(26, 35, 50, 0.14);
+    --app-border: var(--border-subtle);
+    --app-border-strong: var(--border-strong);
+
+    /* Shadows — neumorphic (accent surfaces only) */
+    --shadow-neo-raised:
+        5px 5px 12px rgba(26, 35, 50, 0.08),
+        -4px -4px 10px rgba(255, 255, 255, 0.88);
+    --shadow-neo-pressed:
+        inset 3px 3px 8px rgba(26, 35, 50, 0.08),
+        inset -2px -2px 6px rgba(255, 255, 255, 0.75);
+    --shadow-neo-flat: 0 1px 2px rgba(26, 35, 50, 0.05);
+    --shadow-dropdown: 0 12px 32px rgba(26, 35, 50, 0.12);
+    --shadow-modal: 0 24px 48px rgba(26, 35, 50, 0.16);
+    --shadow-fab: 0 8px 20px rgba(47, 91, 234, 0.28);
+    --shadow-card: var(--shadow-neo-flat);
+
+    /* Sidebar (soft enterprise — same-tone as canvas) */
+    --sidebar-bg: var(--surface-1);
+    --sidebar-text: var(--ink-secondary);
+    --sidebar-text-active: var(--brand-primary);
+    --sidebar-hover: rgba(47, 91, 234, 0.06);
+    --sidebar-active-bg: var(--brand-primary-soft);
+    --sidebar-border: var(--border-subtle);
+
+    /* Glass / KPI (mapped to neo surfaces) */
+    --glass-bg: var(--surface-1);
+    --glass-border: var(--border-subtle);
+    --glass-shadow: var(--shadow-neo-raised);
+
+    /* Typography */
+    --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "Cascadia Code", "Segoe UI Mono", monospace;
+    --font-display: var(--font-sans);
+
+    /* Bootstrap bridge */
+    --bs-body-font-family: var(--font-sans);
+    --bs-body-bg: var(--bg-base);
+    --bs-body-color: var(--ink-primary);
+    --bs-primary: var(--brand-primary);
+    --bs-primary-rgb: 47, 91, 234;
+    --bs-border-color: var(--border-subtle);
+    --bs-link-color: var(--brand-primary);
+    --bs-link-hover-color: var(--brand-primary-hover);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Dark mode tokens                                                           */
+/* -------------------------------------------------------------------------- */
+
+[data-bs-theme="dark"] {
+    --bg-base: #0f1419;
+    --bg-soft: var(--bg-base);
+    --surface-1: #1a212b;
+    --surface-2: #232b38;
+    --surface-muted: #151c26;
+    --surface: var(--surface-2);
+    --surface-elevated: #2a3444;
+
+    --ink-primary: #e8edf5;
+    --ink-secondary: #b6c0d1;
+    --ink-muted: #8896ab;
+    --text-primary: var(--ink-primary);
+    --text-secondary: var(--ink-secondary);
+    --text-muted: var(--ink-muted);
+
+    --brand-primary: #5b7ef5;
+    --brand-primary-hover: #7a97f7;
+    --brand-primary-soft: rgba(91, 126, 245, 0.15);
+    --brand-accent: #2dd4bf;
+    --status-success-soft: rgba(22, 163, 74, 0.15);
+    --status-warning-soft: rgba(217, 119, 6, 0.15);
+    --status-danger-soft: rgba(220, 38, 38, 0.15);
+    --status-info-soft: rgba(37, 99, 235, 0.15);
+
+    /* Chart palette — same roles as :root, tuned lighter/warmer so they
+       stay readable and stay muted (not neon) against the dark navy
+       surfaces instead of just reusing the light-mode values. */
+    --chart-primary: var(--brand-primary);
+    --chart-primary-soft: #93a9f5;
+    --chart-secondary: #a996f0;
+    --chart-secondary-soft: #8677e6;
+    --chart-success: #4ab390;
+    --chart-warning: #d9ab5c;
+    --chart-danger: #dd8580;
+    --chart-info: #6f9adf;
+    --chart-critical: #cf9257;
+    --chart-grid: rgba(255, 255, 255, 0.07);
+    --chart-label: var(--ink-muted);
+    --chart-tooltip-bg: var(--surface-elevated);
+    --chart-tooltip-border: var(--border-strong);
+
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.14);
+    --app-border: var(--border-subtle);
+    --app-border-strong: var(--border-strong);
+
+    --shadow-neo-raised:
+        5px 5px 14px rgba(0, 0, 0, 0.35),
+        -3px -3px 10px rgba(255, 255, 255, 0.04);
+    --shadow-neo-pressed:
+        inset 3px 3px 8px rgba(0, 0, 0, 0.35),
+        inset -2px -2px 6px rgba(255, 255, 255, 0.03);
+    --shadow-neo-flat: 0 1px 2px rgba(0, 0, 0, 0.25);
+    --shadow-dropdown: 0 12px 32px rgba(0, 0, 0, 0.45);
+    --shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.55);
+    --shadow-fab: 0 8px 20px rgba(91, 126, 245, 0.35);
+    --shadow-card: var(--shadow-neo-flat);
+
+    --sidebar-bg: var(--surface-1);
+    --sidebar-text: var(--ink-secondary);
+    --sidebar-text-active: var(--brand-primary);
+    --sidebar-hover: rgba(91, 126, 245, 0.1);
+    --sidebar-active-bg: var(--brand-primary-soft);
+    --sidebar-border: var(--border-subtle);
+
+    --glass-bg: var(--surface-1);
+    --glass-border: var(--border-subtle);
+    --glass-shadow: var(--shadow-neo-raised);
+
+    --bs-body-bg: var(--bg-base);
+    --bs-body-color: var(--ink-primary);
+    --bs-primary: var(--brand-primary);
+    --bs-primary-rgb: 91, 126, 245;
+    --bs-border-color: var(--border-subtle);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. BASE & TYPOGRAPHY                                                       */
+/* -------------------------------------------------------------------------- */
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    background: var(--bg-base);
+    color: var(--ink-primary);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    color: var(--ink-primary);
+    letter-spacing: -0.02em;
+}
+
+code, .font-monospace {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+}
+
+main {
+    animation: fadeInUp 0.3s ease both;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseRing {
+    0%   { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.35); }
+    70%  { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+.fade-in-item {
+    animation: fadeInUp 0.35s ease both;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. APP SHELL                                                               */
+/* -------------------------------------------------------------------------- */
+
+.wrapper {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    background: var(--bg-base);
+}
+
+/* — Sidebar — */
+.sidebar {
+    width: var(--sidebar-width);
+    flex: 0 0 var(--sidebar-width);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    z-index: 1030;
+    flex-shrink: 0;
+    min-width: 0;
+    background: var(--sidebar-bg);
+    color: var(--ink-primary);
+    border-right: 1px solid var(--sidebar-border);
+    box-shadow: var(--shadow-neo-flat);
+}
+
+.sidebar-header {
+    padding: var(--space-5) var(--space-4);
+    text-align: center;
+    border-bottom: 1px solid var(--sidebar-border);
+    background: transparent;
+}
+
+.sidebar-brand-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--brand-primary-soft);
+    color: var(--brand-primary);
+    font-size: 1.35rem;
+    box-shadow: var(--shadow-neo-raised);
+}
+
+.sidebar-header .fw-bold {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-top: var(--space-3);
+    line-height: 1.3;
+}
+
+.sidebar-header small {
+    color: var(--ink-muted) !important;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.sidebar-section-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    padding: var(--space-4) var(--space-3) var(--space-1);
+}
+
+.sidebar-nav .nav-link {
+    color: var(--sidebar-text);
+    border-radius: var(--radius-md);
+    margin: 0 var(--space-2) var(--space-1);
+    padding: 0.625rem var(--space-3);
+    transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 0;
+    min-height: 42px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    border: 1px solid transparent;
+}
+
+.sidebar-nav .nav-link:hover {
+    background: var(--sidebar-hover);
+    color: var(--ink-primary);
+    transform: none;
+}
+
+.sidebar-nav .nav-link.active {
+    background: var(--sidebar-active-bg);
+    color: var(--sidebar-text-active);
+    font-weight: 600;
+    box-shadow: var(--shadow-neo-pressed);
+    border-color: var(--border-subtle);
+}
+
+.sidebar-nav .nav-link .nav-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sidebar-nav .nav-link i {
+    flex-shrink: 0;
+    font-size: 1.05rem;
+    opacity: 0.85;
+}
+
+.sidebar-nav .nav-link.active i {
+    opacity: 1;
+    color: var(--brand-primary);
+}
+
+.sidebar-nav .nav-link.text-danger {
+    color: var(--status-danger);
+}
+
+.sidebar-nav .nav-link.text-danger:hover {
+    background: var(--status-danger-soft);
+    color: var(--status-danger);
+}
+
+.sidebar hr {
+    margin: var(--space-2) var(--space-3);
+    border-color: var(--sidebar-border);
+    opacity: 1;
+}
+
+/* — Main content area — */
+.main-content {
+    margin-left: var(--sidebar-width);
+    min-width: 0;
+    width: calc(100% - var(--sidebar-width));
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+.main-content > main {
+    flex: 1 1 auto;
+    padding: var(--space-4);
+}
+
+@media (min-width: 768px) {
+    .main-content > main {
+        padding: var(--space-6);
+    }
+}
+
+/* — Topbar — */
+.topbar {
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--app-border);
+    min-height: var(--topbar-height);
+    box-shadow: var(--shadow-neo-flat);
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.topbar .container-fluid {
+    min-width: 0;
+    flex-wrap: nowrap;
+    gap: var(--space-2);
+}
+
+.topbar .navbar-brand {
+    font-weight: 700;
+    font-size: 1.0625rem;
+    letter-spacing: -0.02em;
+    color: var(--ink-primary);
+}
+
+.topbar #sidebarToggle {
+    background: var(--surface-1);
+    border: 1px solid var(--app-border);
+    color: var(--ink-secondary);
+    box-shadow: var(--shadow-neo-raised);
+    border-radius: var(--radius-md);
+}
+
+.topbar #sidebarToggle:active {
+    box-shadow: var(--shadow-neo-pressed);
+}
+
+.topbar .dropdown > a.d-flex {
+    min-width: 0;
+    color: var(--ink-primary);
+}
+
+.topbar .dropdown > a.d-flex > span.fw-semibold {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.875rem;
+}
+
+.topbar .btn-outline-secondary {
+    background: var(--surface-1);
+    border-color: var(--app-border);
+    color: var(--ink-secondary);
+}
+
+.topbar .btn-outline-secondary:hover {
+    background: var(--surface-muted);
+    border-color: var(--app-border-strong);
+    color: var(--ink-primary);
+}
+
+/* — Footer — */
+.app-footer {
+    text-align: center;
+    color: var(--ink-muted);
+    font-size: 0.8125rem;
+    padding: var(--space-4);
+    border-top: 1px solid var(--app-border);
+    background: var(--surface-1);
+}
+
+/* — Sidebar overlay (mobile) — */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 35, 50, 0.45);
+    z-index: 1025;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.sidebar-overlay.show {
+    display: block;
+    opacity: 1;
+    cursor: pointer;
+}
+
+body.sidebar-open-lock,
+body.sidebar-open {
+    overflow: hidden;
+}
+
+@media (min-width: 992px) {
+    .sidebar-overlay {
+        display: none !important;
+    }
+    body.sidebar-open-lock,
+    body.sidebar-open {
+        overflow: auto;
+    }
+}
+
+/* — Toast container — */
+#toastContainer {
+    z-index: 1200;
+}
+
+.toast-container .toast {
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-dropdown);
+    font-size: 0.875rem;
+}
+
+/* — Global loading spinner — */
+.spinner-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1300;
+    align-items: center;
+    justify-content: center;
+    background: rgba(26, 35, 50, 0.25);
+    backdrop-filter: blur(2px);
+}
+
+.spinner-overlay[style*="flex"],
+.spinner-overlay.show {
+    display: flex !important;
+}
+
+.spinner-overlay .spinner-border {
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: var(--space-4);
+    background: var(--surface-2);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-modal);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. PAGE HEADING                                                            */
+/* -------------------------------------------------------------------------- */
+
+.dash-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+}
+
+.dash-heading h2 {
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.025em;
+    margin-bottom: var(--space-1);
+    color: var(--ink-primary);
+}
+
+.dash-heading .text-muted {
+    font-size: 0.875rem;
+    color: var(--ink-muted) !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. CORE COMPONENTS — Buttons                                               */
+/* -------------------------------------------------------------------------- */
+
+.btn {
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.875rem;
+    letter-spacing: 0.01em;
+    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+}
+
+.btn-primary {
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
+    box-shadow: var(--shadow-neo-raised);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: var(--brand-primary-hover);
+    border-color: var(--brand-primary-hover);
+    box-shadow: var(--shadow-neo-raised);
+}
+
+.btn-primary:active {
+    box-shadow: var(--shadow-neo-pressed);
+}
+
+.btn-success {
+    box-shadow: var(--shadow-neo-flat);
+}
+
+.btn-outline-primary {
+    color: var(--brand-primary);
+    border-color: var(--app-border-strong);
+    background: var(--surface-2);
+}
+
+.btn-outline-primary:hover {
+    background: var(--brand-primary-soft);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+}
+
+.btn-outline-secondary {
+    background: var(--surface-1);
+    border-color: var(--app-border);
+    color: var(--ink-secondary);
+}
+
+.btn-outline-secondary:hover {
+    background: var(--surface-muted);
+    color: var(--ink-primary);
+}
+
+.btn-sm {
+    min-height: 36px;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.8125rem;
+}
+
+/* Table action buttons stay compact on desktop */
+table .btn-sm {
+    min-height: 34px;
+}
+
+.btn,
+.page-link,
+.nav-link,
+.dropdown-item {
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn,
+.page-link {
+    min-height: 40px;
+}
+
+.dropdown-item {
+    min-height: 40px;
+    font-size: 0.875rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 6. CORE COMPONENTS — Forms & inputs                                        */
+/* -------------------------------------------------------------------------- */
+
+.form-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink-secondary);
+    margin-bottom: var(--space-2);
+}
+
+.form-control,
+.form-select {
+    min-height: 44px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--app-border);
+    background: var(--surface-2);
+    color: var(--ink-primary);
+    font-size: 0.9375rem;
+    box-shadow: var(--shadow-neo-pressed);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--brand-primary);
+    box-shadow: var(--shadow-neo-pressed), 0 0 0 3px rgba(47, 91, 234, 0.12);
+}
+
+textarea.form-control {
+    min-height: 80px;
+    box-shadow: var(--shadow-neo-pressed);
+}
+
+.form-control-sm,
+.form-select-sm {
+    min-height: 36px;
+    font-size: 0.8125rem;
+}
+
+.form-text {
+    color: var(--ink-muted);
+    font-size: 0.8125rem;
+}
+
+.input-group-text {
+    background: var(--surface-muted);
+    border: 1px solid var(--app-border);
+    border-radius: var(--radius-md);
+    color: var(--ink-muted);
+    min-height: 44px;
+}
+
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+    margin-left: calc(-1 * var(--bs-border-width));
+}
+
+.input-group .form-control {
+    box-shadow: var(--shadow-neo-pressed);
+}
+
+.input-group .btn {
+    min-height: 44px;
+}
+
+/* Filter toolbar (forms inside card bodies) */
+.card-body form.row.g-2,
+.chart-card .card-body > form.row {
+    margin-bottom: var(--space-4);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 7. CORE COMPONENTS — Cards & panels                                        */
+/* -------------------------------------------------------------------------- */
+
+.card {
+    border: 1px solid var(--app-border);
+    border-radius: var(--card-radius);
+    background: var(--surface-2);
+    box-shadow: var(--shadow-neo-flat);
+}
+
+.card-header {
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--app-border);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--ink-primary);
+    border-top-left-radius: var(--card-radius) !important;
+    border-top-right-radius: var(--card-radius) !important;
+    padding: var(--space-4) var(--space-5);
+}
+
+.card-body {
+    padding: var(--space-5);
+}
+
+.card.shadow-sm,
+.stat-card {
+    border: 1px solid var(--app-border);
+    box-shadow: var(--shadow-neo-flat);
+    background: var(--surface-2);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-neo-raised) !important;
+}
+
+.chart-card {
+    border: 1px solid var(--app-border);
+    border-radius: var(--radius-lg);
+    background: var(--surface-2);
+    box-shadow: var(--shadow-neo-flat);
+}
+
+.chart-card .card-header {
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+}
+
+.chart-card .card-header .subtitle {
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: var(--ink-muted);
+}
+
+/* KPI / stat tiles — raised neumorphic */
+.glass-card {
+    background: var(--surface-1);
+    border: 1px solid var(--app-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-neo-raised);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card::before {
+    display: none;
+}
+
+.stat-tile {
+    padding: var(--space-5);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    height: 100%;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.stat-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-neo-raised);
+}
+
+.stat-tile .icon-badge {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--brand-primary);
+    background: var(--brand-primary-soft);
+    box-shadow: var(--shadow-neo-flat);
+}
+
+.stat-tile .stat-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-muted);
+}
+
+.stat-tile .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    color: var(--ink-primary);
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.stat-tile .stat-sub {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+}
+
+.stat-tile.attn .icon-badge {
+    color: var(--status-danger);
+    background: var(--status-danger-soft);
+    animation: pulseRing 2.4s infinite;
+}
+
+/* Soft tinted icon backgrounds (replaces heavy gradients) */
+.bg-grad-indigo,
+.bg-grad-sky,
+.bg-grad-teal,
+.bg-grad-violet,
+.bg-grad-emerald,
+.bg-grad-slate {
+    background: var(--brand-primary-soft) !important;
+    color: var(--brand-primary) !important;
+}
+
+.bg-grad-amber {
+    background: var(--status-warning-soft) !important;
+    color: var(--status-warning) !important;
+}
+
+.bg-grad-rose {
+    background: var(--status-danger-soft) !important;
+    color: var(--status-danger) !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 8. CORE COMPONENTS — Tables (flat, readable)                               */
+/* -------------------------------------------------------------------------- */
+
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--ink-primary);
+    --bs-table-border-color: var(--app-border);
+    font-size: 0.875rem;
+}
+
+.table thead th {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-muted);
+    border-bottom-width: 1px;
+    padding: var(--space-3) var(--space-3);
+    background: var(--surface-muted);
+}
+
+.table-light {
+    --bs-table-bg: var(--surface-muted);
+    --bs-table-color: var(--ink-primary);
+    --bs-table-border-color: var(--app-border);
+}
+
+.table td,
+.table th {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    padding: var(--space-3);
+    vertical-align: middle;
+}
+
+.table-hover > tbody > tr:hover > * {
+    background: var(--brand-primary-soft);
+    color: var(--ink-primary);
+}
+
+.table td a.btn + a.btn,
+.table td button.btn + button.btn,
+.table td a.btn + button.btn,
+.table td .btn + .btn {
+    margin-left: var(--space-2);
+}
+
+.table td.text-end:not(.text-nowrap),
+.table th.text-end {
+    white-space: nowrap;
+}
+
+.table-borderless th {
+    color: var(--ink-muted);
+    font-weight: 600;
+    white-space: nowrap;
+    vertical-align: top;
+    padding-right: var(--space-4);
+    text-transform: none;
+    font-size: 0.8125rem;
+}
+
+.table-borderless td {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.table-responsive {
+    border-radius: var(--radius-md);
+    border: 1px solid var(--app-border);
+}
+
+@media (min-width: 992px) {
+    .table-responsive {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    .table-responsive thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: var(--surface-muted);
+        box-shadow: 0 1px 0 var(--app-border);
+    }
+}
+
+/* Empty table states */
+.table tbody td.text-center.py-5 {
+    padding: var(--space-10) var(--space-4) !important;
+}
+
+.table tbody td.text-center.py-5 .bi {
+    color: var(--ink-muted);
+    opacity: 0.5;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 9. CORE COMPONENTS — Badges & chips                                        */
+/* -------------------------------------------------------------------------- */
+
+.badge {
+    font-weight: 600;
+    font-size: 0.6875rem;
+    letter-spacing: 0.02em;
+    padding: 0.35em 0.65em;
+    border-radius: var(--radius-sm);
+}
+
+.badge.bg-success,
+.bg-success.badge {
+    background: var(--status-success-soft) !important;
+    color: var(--status-success) !important;
+}
+
+.badge.bg-danger,
+.bg-danger.badge {
+    background: var(--status-danger-soft) !important;
+    color: var(--status-danger) !important;
+}
+
+.badge.bg-warning,
+.bg-warning.badge {
+    background: var(--status-warning-soft) !important;
+    color: var(--status-warning) !important;
+}
+
+.badge.bg-secondary,
+.bg-secondary.badge {
+    background: var(--surface-muted) !important;
+    color: var(--ink-muted) !important;
+}
+
+.badge.bg-primary,
+.bg-primary.badge {
+    background: var(--brand-primary-soft) !important;
+    color: var(--brand-primary) !important;
+}
+
+.badge.bg-info,
+.bg-info.badge {
+    background: var(--status-info-soft) !important;
+    color: var(--status-info) !important;
+}
+
+.badge.bg-light {
+    background: var(--surface-muted) !important;
+    color: var(--ink-secondary) !important;
+    border: 1px solid var(--app-border);
+}
+
+/* Bootstrap subtle badges */
+.bg-success-subtle.text-success { background: var(--status-success-soft) !important; color: var(--status-success) !important; }
+.bg-danger-subtle.text-danger   { background: var(--status-danger-soft) !important; color: var(--status-danger) !important; }
+.bg-primary-subtle.text-primary { background: var(--brand-primary-soft) !important; color: var(--brand-primary) !important; }
+
+/* -------------------------------------------------------------------------- */
+/* 10. CORE COMPONENTS — Alerts                                               */
+/* -------------------------------------------------------------------------- */
+
+.alert {
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    border-left-width: 4px;
+    font-size: 0.875rem;
+    box-shadow: var(--shadow-neo-flat);
+}
+
+.alert-success {
+    background: var(--status-success-soft);
+    border-left-color: var(--status-success);
+    color: #14532d;
+}
+
+.alert-danger {
+    background: var(--status-danger-soft);
+    border-left-color: var(--status-danger);
+    color: #7f1d1d;
+}
+
+.alert-warning {
+    background: var(--status-warning-soft);
+    border-left-color: var(--status-warning);
+    color: #78350f;
+}
+
+.alert-info {
+    background: var(--status-info-soft);
+    border-left-color: var(--status-info);
+    color: #1e3a8a;
+}
+
+[data-bs-theme="dark"] .alert-success { color: #86efac; }
+[data-bs-theme="dark"] .alert-danger  { color: #fca5a5; }
+[data-bs-theme="dark"] .alert-warning { color: #fcd34d; }
+[data-bs-theme="dark"] .alert-info    { color: #93c5fd; }
+
+/* -------------------------------------------------------------------------- */
+/* 11. CORE COMPONENTS — Pagination                                           */
+/* -------------------------------------------------------------------------- */
+
+.pagination {
+    gap: var(--space-1);
+}
+
+.pagination .page-link {
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--app-border);
+    background: var(--surface-1);
+    color: var(--ink-secondary);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    min-width: 38px;
+    justify-content: center;
+    box-shadow: var(--shadow-neo-flat);
+}
+
+.pagination .page-link:hover {
+    background: var(--brand-primary-soft);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
+    color: #fff;
+    box-shadow: var(--shadow-neo-raised);
+}
+
+.pagination .page-item.disabled .page-link {
+    background: var(--surface-muted);
+    color: var(--ink-muted);
+    box-shadow: none;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 12. CORE COMPONENTS — Dropdowns                                            */
+/* -------------------------------------------------------------------------- */
+
+.dropdown-menu {
+    border: 1px solid var(--app-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-dropdown);
+    padding: var(--space-2);
+    background: var(--surface-2);
+}
+
+.dropdown-item {
+    border-radius: var(--radius-sm);
+    color: var(--ink-primary);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background: var(--brand-primary-soft);
+    color: var(--brand-primary);
+}
+
+.dropdown-item.text-danger:hover {
+    background: var(--status-danger-soft);
+    color: var(--status-danger);
+}
+
+.dropdown-divider {
+    border-color: var(--app-border);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 13. NOTIFICATIONS UI                                                       */
+/* -------------------------------------------------------------------------- */
+
+.notif-dropdown .notif-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    font-size: 0.625rem;
+    padding: 0.2em 0.45em;
+    animation: pulseRing 2.2s infinite;
+}
+
+.notif-panel {
+    width: 340px;
+    max-width: 92vw;
+    border: 1px solid var(--app-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-dropdown);
+    overflow: hidden;
+    padding: 0;
+    background: var(--surface-2);
+}
+
+.notif-panel-header {
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--app-border);
+    font-size: 0.875rem;
+}
+
+.notif-panel-body {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.notif-item {
+    border-bottom: 1px solid var(--app-border);
+    transition: background 0.15s ease;
+}
+
+.notif-item:last-child {
+    border-bottom: none;
+}
+
+.notif-item:hover {
+    background: var(--brand-primary-soft);
+}
+
+.notif-icon {
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.notif-panel-footer {
+    background: var(--surface-1);
+    border-top: 1px solid var(--app-border);
+}
+
+.notif-panel-footer a {
+    color: var(--brand-primary);
+    font-weight: 600;
+}
+
+.notif-card-list .notif-card {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--surface-2);
+    border: 1px solid var(--app-border);
+    margin-bottom: var(--space-2);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.notif-card-list .notif-card:hover {
+    transform: none;
+    box-shadow: var(--shadow-neo-flat);
+    border-color: var(--app-border-strong);
+}
+
+.notif-card-list .notif-card:last-child {
+    margin-bottom: 0;
+}
+
+.notif-card .notif-card-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    background: var(--surface-muted);
+    color: var(--ink-secondary);
+}
+
+.notif-card.type-danger  .notif-card-icon { background: var(--status-danger-soft);  color: var(--status-danger); }
+.notif-card.type-warning .notif-card-icon { background: var(--status-warning-soft); color: var(--status-warning); }
+.notif-card.type-info    .notif-card-icon { background: var(--status-info-soft);    color: var(--status-info); }
+.notif-card.type-success .notif-card-icon { background: var(--status-success-soft); color: var(--status-success); }
+
+.list-group-item.d-flex,
+.notif-card,
+.notif-item {
+    min-width: 0;
+}
+
+.list-group-item.d-flex > span,
+.notif-card .flex-grow-1,
+.notif-item .flex-grow-1 {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.list-group-item.d-flex {
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 14. DASHBOARD — Charts, activity, expiry                                   */
+/* -------------------------------------------------------------------------- */
+
+.chart-canvas-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.chart-canvas-wrap.h-220 { height: 220px; }
+.chart-canvas-wrap.h-260 { height: 260px; }
+
+.chart-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+    text-align: center;
+    padding: var(--space-4);
+}
+
+.activity-timeline {
+    position: relative;
+    padding-left: var(--space-6);
+}
+
+.activity-timeline::before {
+    content: "";
+    position: absolute;
+    left: 0.35rem;
+    top: 0.35rem;
+    bottom: 0.35rem;
+    width: 2px;
+    background: var(--app-border-strong);
+}
+
+.activity-item {
+    position: relative;
+    padding-bottom: var(--space-4);
+}
+
+.activity-item:last-child {
+    padding-bottom: 0;
+}
+
+.activity-item::before {
+    content: "";
+    position: absolute;
+    left: calc(-1 * var(--space-6) + 0.2rem);
+    top: 0.35rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--brand-primary);
+    box-shadow: 0 0 0 3px var(--brand-primary-soft);
+}
+
+.activity-scroll,
+.scrollable-card {
+    max-height: 420px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.expiry-band {
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    margin-bottom: var(--space-2);
+    font-weight: 600;
+    font-size: 0.875rem;
+    box-shadow: var(--shadow-neo-flat);
+}
+
+.expiry-band:last-child {
+    margin-bottom: 0;
+}
+
+.expiry-band .band-count {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.expiry-band.band-expired  { background: var(--status-danger); }
+.expiry-band.band-critical { background: #ea580c; }
+.expiry-band.band-warning  { background: var(--status-warning); }
+.expiry-band.band-notice   { background: #ca8a04; }
+
+.notif-panel-body::-webkit-scrollbar,
+.activity-scroll::-webkit-scrollbar,
+.scrollable-card::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notif-panel-body::-webkit-scrollbar-thumb,
+.activity-scroll::-webkit-scrollbar-thumb,
+.scrollable-card::-webkit-scrollbar-thumb {
+    background: var(--app-border-strong);
+    border-radius: 3px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 15. FAB (mobile)                                                           */
+/* -------------------------------------------------------------------------- */
+
+.fab-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1035;
+    background: rgba(26, 35, 50, 0.3);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.fab-backdrop.show {
+    display: block;
+    opacity: 1;
+}
+
+.fab-wrap {
+    position: fixed;
+    right: max(1.1rem, env(safe-area-inset-right, 0px));
+    bottom: max(1.4rem, env(safe-area-inset-bottom, 0px));
+    z-index: 1040;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: var(--space-2);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.fab-main {
+    width: 56px;
+    height: 56px;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: var(--radius-full);
+    border: none;
+    background: var(--brand-primary);
+    color: #fff;
+    font-size: 1.35rem;
+    box-shadow: var(--shadow-fab);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fab-wrap.open .fab-main {
+    transform: rotate(45deg);
+    box-shadow: var(--shadow-neo-pressed);
+}
+
+.fab-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-2);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.fab-wrap.open .fab-menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.fab-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: var(--surface-2);
+    color: var(--ink-primary);
+    border: 1px solid var(--app-border);
+    border-radius: var(--radius-full);
+    padding: 0.55rem 1rem;
+    min-height: 44px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: var(--shadow-dropdown);
+    white-space: nowrap;
+}
+
+.fab-item:hover,
+.fab-item:focus-visible {
+    background: var(--surface-1);
+    color: var(--ink-primary);
+}
+
+#cameraScanBtn {
+    min-width: 44px;
+}
+
+@media (min-width: 768px) {
+    .fab-wrap {
+        display: none;
+    }
+    #cameraScanBtn {
+        display: none;
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 16. LOGIN — premium soft-enterprise neumorphism (scoped to .login-body)    */
+/* -------------------------------------------------------------------------- */
+
+.login-body {
+    background: radial-gradient(circle at 50% 0%, var(--surface-1), var(--bg-base) 62%);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    margin: 0;
+}
+
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    background: var(--surface-1);
+    border: 1px solid var(--app-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-neo-raised);
+    padding: 2.75rem 2.5rem;
+}
+
+/* Brand */
+.login-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-brand-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-lg);
+    background: var(--surface-1);
+    box-shadow: var(--shadow-neo-raised);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: var(--brand-primary);
+    margin-bottom: 0.75rem;
+}
+
+.login-brand-name {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+}
+
+/* Heading */
+.login-heading {
+    text-align: center;
+    margin-bottom: 1.75rem;
+}
+
+.login-heading h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--ink-primary);
+    margin: 0 0 0.375rem;
+    letter-spacing: -0.01em;
+}
+
+.login-heading p {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    margin: 0;
+}
+
+/* Error / validation */
+.login-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    background: var(--status-danger-soft);
+    color: var(--status-danger);
+    border-left: 3px solid var(--status-danger);
+    border-radius: var(--radius-md);
+    padding: 0.7rem 0.9rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-bottom: 1.25rem;
+}
+
+.login-alert i {
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+}
+
+/* Form */
+.login-field {
+    margin-bottom: 1.25rem;
+}
+
+.login-field--last {
+    margin-bottom: 1.5rem;
+}
+
+.login-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.login-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--surface-1);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-neo-pressed);
+    transition: box-shadow 0.2s ease;
+}
+
+.login-input-wrap:focus-within {
+    box-shadow: var(--shadow-neo-pressed), 0 0 0 3px var(--brand-primary-soft);
+}
+
+.login-input-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--ink-muted);
+    font-size: 0.95rem;
+    pointer-events: none;
+}
+
+.login-input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    border-radius: inherit;
+    padding: 0.85rem 1rem 0.85rem 2.75rem;
+    font-size: 0.95rem;
+    font-family: var(--font-sans);
+    color: var(--ink-primary);
+    outline: none;
+}
+
+.login-input::placeholder {
+    color: var(--ink-muted);
+}
+
+.login-input-wrap--pw .login-input {
+    padding-right: 2.75rem;
+}
+
+.login-toggle-btn {
+    position: absolute;
+    right: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.login-toggle-btn:hover {
+    color: var(--brand-primary);
+    background: var(--brand-primary-soft);
+}
+
+.login-submit-btn {
+    width: 100%;
+    margin-top: 0.25rem;
+    padding: 0.9rem 1rem;
+    border: none;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-hover));
+    color: #fff;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    box-shadow: var(--shadow-fab);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.login-submit-btn:hover {
+    filter: brightness(1.05);
+}
+
+.login-submit-btn:active {
+    transform: translateY(1px);
+    box-shadow: var(--shadow-neo-flat);
+}
+
+.login-submit-btn:focus-visible {
+    outline: 2px solid var(--brand-primary);
+    outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+    .login-card {
+        padding: 2rem 1.5rem;
+        border-radius: var(--radius-lg);
+    }
+
+    .login-page {
+        padding: 16px;
+    }
+
+    .login-heading h1 {
+        font-size: 1.25rem;
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 17. UTILITIES & MISC                                                       */
+/* -------------------------------------------------------------------------- */
+
+.mobile-only {
+    display: none;
+}
+
+.desktop-only {
+    display: initial;
+}
+
+.avatar-img,
+.product-hero-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+}
+
+.modal-dialog {
+    max-width: min(900px, 92vw);
+}
+
+.modal-content {
+    border: 1px solid var(--app-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-modal);
+}
+
+.modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modal-footer {
+    position: sticky;
+    bottom: 0;
+    background: var(--surface-2);
+    border-top: 1px solid var(--app-border);
+}
+
+.touch-btn {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Focus visibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.nav-link:focus-visible,
+.page-link:focus-visible {
+    outline: 3px solid rgba(47, 91, 234, 0.45);
+    outline-offset: 2px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 18. RESPONSIVE                                                             */
+/* -------------------------------------------------------------------------- */
+
+@media (max-width: 991.98px) {
+    .sidebar {
+        left: calc(-1 * var(--sidebar-width));
+        transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: var(--shadow-modal);
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .wrapper {
+        display: block;
+    }
+
+    .activity-scroll,
+    .scrollable-card {
+        max-height: 320px;
+    }
+
+    .chart-canvas-wrap.h-220,
+    .chart-canvas-wrap.h-260 {
+        height: 200px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .mobile-only { display: initial; }
+    .desktop-only { display: none; }
+
+    .table-responsive {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table-responsive .table {
+        font-size: 0.8125rem;
+    }
+
+    .table-responsive .table td,
+    .table-responsive .table th {
+        white-space: nowrap;
+    }
+
+    .table-responsive .table td.small,
+    .table-responsive .table td .small {
+        white-space: normal;
+    }
+
+    .scrollable-card {
+        max-height: 320px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .topbar {
+        min-height: 56px;
+    }
+
+    .topbar .btn-sm {
+        padding: 0.35rem 0.55rem;
+    }
+
+    .notif-panel {
+        width: min(92vw, 340px);
+    }
+
+    .form-control,
+    .form-select,
+    .btn {
+        font-size: 1rem;
+    }
+
+    .input-group > .btn {
+        min-width: 44px;
+    }
+
+    .stat-tile {
+        padding: var(--space-4);
+    }
+
+    .stat-tile .icon-badge {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        font-size: 1.1rem;
+    }
+
+    .stat-tile .stat-value {
+        font-size: 1.35rem;
+    }
+
+    .row.g-3 > .col-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .dash-heading .d-flex.gap-2,
+    .dash-heading .d-flex.gap-2.flex-wrap {
+        flex-direction: column;
+        align-items: stretch !important;
+        width: 100%;
+    }
+
+    .dash-heading .d-flex.gap-2 .btn,
+    .dash-heading .d-flex.gap-2.flex-wrap .btn {
+        width: 100%;
+    }
+
+    form .row.g-2 > [class*="col-"],
+    form .row.g-2 > .col-md-1.d-grid,
+    form .row.g-2 > .col-6.col-md-1.d-grid {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .card-body > .d-flex.justify-content-between.align-items-center,
+    .card-body > .d-flex.flex-wrap.justify-content-between.align-items-center {
+        flex-direction: column;
+        gap: var(--space-3);
+        align-items: center !important;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
+
+    .pagination .page-link {
+        padding: 0.45rem 0.65rem;
+        min-width: 44px;
+    }
+
+    .chart-canvas-wrap.h-220,
+    .chart-canvas-wrap.h-260 {
+        height: 180px;
+    }
+
+    .chart-card .card-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: var(--space-1);
+    }
+
+    .avatar-img,
+    .product-hero-img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .activity-timeline {
+        padding-left: 0;
+    }
+
+    .activity-timeline::before {
+        display: none;
+    }
+
+    .activity-item {
+        background: var(--surface-2);
+        border: 1px solid var(--app-border);
+        border-radius: var(--radius-md);
+        padding: var(--space-3);
+        margin-bottom: var(--space-2);
+    }
+
+    .activity-item::before {
+        display: none;
+    }
+
+    .notif-card {
+        padding: var(--space-3);
+    }
+
+    .notif-card .btn-sm,
+    .mark-read-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .topbar form[method="GET"],
+    .topbar .input-group {
+        width: 100%;
+    }
+
+    .topbar .ms-auto {
+        margin-left: auto !important;
+    }
+
+    .modal-dialog {
+        max-width: 95vw;
+        margin: 0.5rem auto;
+    }
+
+    .glass-card.stat-tile,
+    .card-body {
+        padding: var(--space-4);
+    }
+}
+
+@media (max-width: 1399.98px) {
+    .stat-tile .stat-value {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .chart-canvas-wrap.h-220 {
+        height: 210px;
+    }
+}
+
+@media (max-width: 480px) {
+    .row.g-3 > .col-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 375px) {
+    .sidebar {
+        width: 240px;
+        left: -240px;
+    }
+    :root {
+        --sidebar-width: 240px;
+    }
+    .fab-main {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 320px) {
+    .sidebar {
+        width: 220px;
+        left: -220px;
+    }
+    :root {
+        --sidebar-width: 220px;
+    }
+    .stat-tile .icon-badge {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+    .stat-tile .stat-value {
+        font-size: 1.15rem;
+    }
+    .dash-heading h2 {
+        font-size: 1.25rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/* 19. DARK MODE — component overrides                                        */
+/* -------------------------------------------------------------------------- */
+
+[data-bs-theme="dark"] .topbar {
+    background: var(--surface-2);
+    border-bottom-color: var(--app-border);
+}
+
+[data-bs-theme="dark"] .card-header {
+    background: var(--surface-1);
+    border-bottom-color: var(--app-border);
+    color: var(--ink-primary);
+}
+
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+    background: var(--surface-2);
+    border-color: var(--app-border);
+    color: var(--ink-primary);
+}
+
+[data-bs-theme="dark"] .input-group-text {
+    background: var(--surface-muted);
+    border-color: var(--app-border);
+    color: var(--ink-muted);
+}
+
+[data-bs-theme="dark"] .table-light {
+    --bs-table-bg: var(--surface-muted);
+    --bs-table-color: var(--ink-primary);
+    --bs-table-border-color: var(--app-border);
+}
+
+[data-bs-theme="dark"] .table-responsive thead th {
+    background: var(--surface-muted);
+}
+
+[data-bs-theme="dark"] .table-hover > tbody > tr:hover > * {
+    background: var(--brand-primary-soft);
+}
+
+[data-bs-theme="dark"] .activity-item {
+    background: var(--surface-2);
+    border-color: var(--app-border);
+}
+
+[data-bs-theme="dark"] .fab-item {
+    background: var(--surface-2);
+    color: var(--ink-primary);
+    border-color: var(--app-border);
+}
+
+[data-bs-theme="dark"] .fab-item:hover {
+    background: var(--surface-1);
+}
+
+[data-bs-theme="dark"] .app-footer {
+    background: var(--surface-1);
+    border-top-color: var(--app-border);
+}
+
+[data-bs-theme="dark"] .pagination .page-link {
+    background: var(--surface-1);
+    border-color: var(--app-border);
+    color: var(--ink-secondary);
+}
+
+[data-bs-theme="dark"] .pagination .page-item.active .page-link {
+    background: var(--brand-primary);
+    color: #fff;
+}

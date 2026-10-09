@@ -1,0 +1,65 @@
+MULTI-BRANCH / STOCK IN FIX — NOTES
+====================================
+
+ROOT CAUSE
+----------
+The PHP application code (includes/functions.php, includes/stock_in_page.php,
+includes/auth.php, and every admin/staff page that touches branches) was
+already fully built for Multi-Branch: it reads/writes a `branches` table and
+a `branch_id` column on `users`, `inventory_batches`, and `stock_transactions`,
+and it INSERTs into a `stock_transfers` table.
+
+database/migration_multi_branch.sql (an ALTER-based migration for an
+*existing* database) already added all of this correctly and safely.
+
+BUT database/inventory_system_client_clean.sql — the "fresh install" dump —
+was generated from a database that never had the migration applied. It
+contained none of the Multi-Branch schema:
+  - no `branches` table at all
+  - no `branch_id` column on `users`, `inventory_batches`, `stock_transactions`
+  - no `stock_transfers` table
+  - `stock_transactions.type` enum was never widened for 'Transfer Out'/'Transfer In'
+
+Any install (or reinstall/reset) done from that clean SQL therefore had a
+database that did not match what the PHP code required:
+  - branch_options() queried a non-existent `branches` table, caught the
+    PDOException, and silently returned [] -> the Admin Stock In branch
+    dropdown had nothing but "Select branch..." in it.
+  - Even if a branch_id had been forced through, the INSERT in stock_in()
+    referenced a `branch_id` column that didn't exist on
+    `inventory_batches` / `stock_transactions` -> SQL error, caught,
+    "Stock In failed. Please try again."
+  - This affected Admin AND Staff identically, and would have affected
+    Stock Out, Stock Transfer, and every branch-scoped report the same way
+    the moment they were used against a freshly-installed database.
+
+This was a schema/PHP synchronization gap, not a logic bug in the PHP.
+
+FIX
+---
+database/inventory_system_client_clean.sql was updated so a *fresh* install
+ends up with the exact same schema database/migration_multi_branch.sql
+produces for an *existing* install:
+  - added `branches` table (+ seeded branch_id=1 'MAIN' / 'Main Branch')
+  - added `users.branch_id` (nullable — NULL means system-wide Admin)
+  - added `inventory_batches.branch_id` (NOT NULL DEFAULT 1)
+  - added `stock_transactions.branch_id` (NOT NULL DEFAULT 1) and
+    `stock_transactions.transfer_id` (nullable)
+  - widened `stock_transactions.type` to include 'Transfer Out'/'Transfer In'
+  - added `stock_transfers` table
+  - added every index and foreign key that migration_multi_branch.sql adds
+
+No PHP files needed logic changes — the application code was already
+correct. database/migration_multi_branch.sql is unchanged and still the
+correct path for anyone with an existing pre-Multi-Branch database; it
+remains idempotent (ADD COLUMN/KEY IF NOT EXISTS, INSERT IGNORE) and safe
+to run against a database already matching the new clean SQL (every
+statement becomes a no-op).
+
+WHICH SQL FILE TO RUN
+----------------------
+- Brand-new install: import database/inventory_system_client_clean.sql only.
+- Existing database (already has data, never had branches): run
+  database/migration_multi_branch.sql once.
+- Existing database that already ran the migration: nothing to do; it
+  already matches the clean SQL's schema.

@@ -1,0 +1,14 @@
+/**
+ * fonts.css
+ * Local @font-face for Plus Jakarta Sans (variable font, weights 400-700).
+ * Vendored from Google Fonts (OFL-1.1 licensed — see assets/fonts/PlusJakartaSans-OFL.txt)
+ * so the app no longer depends on fonts.googleapis.com / fonts.gstatic.com.
+ */
+@font-face {
+    font-family: 'Plus Jakarta Sans';
+    src: url('../fonts/PlusJakartaSans-Variable.woff2') format('woff2-variations'),
+         url('../fonts/PlusJakartaSans-Variable.woff2') format('woff2');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+}
